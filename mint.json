@@ -1,0 +1,112 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Seismic Cards API",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark":  "/logo/dark.svg",
+    "href":  "https://docs.seismic.systems"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary":    "#0D0D0D",
+    "light":      "#FAFAFA",
+    "dark":       "#0D0D0D",
+    "anchors": {
+      "from":     "#0D0D0D",
+      "to":       "#3B3B3B"
+    },
+    "background": {
+      "light":    "#FFFFFF",
+      "dark":     "#0A0A0A"
+    }
+  },
+  "modeToggle": {
+    "default":           "dark",
+    "isHidden":          false
+  },
+  "topbarLinks": [
+    {
+      "name": "Status",
+      "url":  "https://status.seismic.systems"
+    },
+    {
+      "name": "Support",
+      "url":  "mailto:support@seismic.systems"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Talk to Sales",
+    "url":  "https://www.seismic.systems"
+  },
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url":  "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Issue your first card",
+      "icon": "credit-card",
+      "url":  "issuing-a-card"
+    },
+    {
+      "name": "Webhooks",
+      "icon": "bolt",
+      "url":  "webhooks"
+    },
+    {
+      "name": "PCI Widget",
+      "icon": "shield-check",
+      "url":  "pci-widget"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get started",
+      "pages": [
+        "introduction",
+        "getting-started"
+      ]
+    },
+    {
+      "group": "Guides",
+      "pages": [
+        "issuing-a-card",
+        "pci-widget",
+        "webhooks"
+      ]
+    },
+    {
+      "group": "Reference",
+      "pages": [
+        "api-reference",
+        "errors"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "website":  "https://www.seismic.systems",
+    "x":        "https://x.com/seismicsys",
+    "linkedin": "https://www.linkedin.com/company/seismicsystems"
+  },
+  "feedback": {
+    "thumbsRating":   true,
+    "suggestEdit":    true,
+    "raiseIssue":     true
+  },
+  "search": {
+    "prompt": "Search the Seismic Cards docs…"
+  },
+  "seo": {
+    "indexHiddenPages": false
+  },
+  "metadata": {
+    "og:title":       "Seismic Cards API",
+    "og:description": "Issue Visa / Mastercard virtual cards. PCI-compliant card issuing platform with sub-accounts, KYC, cardholders, budgets, real-time webhooks, and a drop-in widget for displaying full card details.",
+    "og:image":       "/logo/og.png"
+  }
+}
