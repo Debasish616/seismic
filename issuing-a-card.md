@@ -31,7 +31,7 @@ Every end user gets their own Seismic sub‑account. The sub‑account is the le
 
 ```http
 POST /v1/accounts/register
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Content-Type: application/json
 
@@ -44,7 +44,7 @@ Content-Type: application/json
 ```
 
 ```bash
-curl -X POST https://sandbox-api.seismic.systems/v1/accounts/register \
+curl -X POST https://sandbox-api.seismic-cards.systems/v1/accounts/register \
   -H "x-access-token: $ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -85,7 +85,7 @@ This guide shows option 1.
 
 ```http
 POST /v1/accounts/{accountId}/kyc
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Content-Type: application/json
 
@@ -103,7 +103,7 @@ Content-Type: application/json
 The KYC submission is **asynchronous**. You'll receive a `KYC.UPDATED` webhook when the result is in (typically <2 minutes). You can also poll:
 
 ```bash
-curl "https://sandbox-api.seismic.systems/v1/accounts/cdd/detail/$ACCOUNT_ID" \
+curl "https://sandbox-api.seismic-cards.systems/v1/accounts/cdd/detail/$ACCOUNT_ID" \
   -H "x-access-token: $ACCESS_TOKEN"
 ```
 
@@ -142,7 +142,7 @@ Once KYC is `APPROVED`, perform a one‑time initialization to provision the acc
 
 ```http
 POST /v1/accounts/{accountId}/init
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Content-Type: application/json
 
@@ -171,7 +171,7 @@ A cardholder is the persistent identity behind every card a user owns. **Create 
 
 ```http
 POST /v1/cardholders
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Idempotency-Key: 4b3f9e2c-0c4a-43b3-8e73-2f1ef0a3a9f1
 Content-Type: application/json
@@ -242,7 +242,7 @@ A budget is the USD pool that backs your user's cards. Cards spend from the budg
 
 ```http
 POST /v1/budgets
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Idempotency-Key: 8a7c6e2d-1f4a-43b3-8e73-2f1ef0a3a9f1
 Content-Type: application/json
@@ -276,7 +276,7 @@ A budget starts at $0. Move USD into it from your master merchant account before
 
 ```http
 POST /v1/budgets/{budgetId}/transfer-in
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Idempotency-Key: f4e6c2a1-1f4a-43b3-8e73-2f1ef0a3a9f1
 Content-Type: application/json
@@ -300,7 +300,7 @@ Content-Type: application/json
 To verify, fetch the budget back:
 
 ```bash
-curl "https://sandbox-api.seismic.systems/v1/budgets/$BUDGET_ID?accountId=$ACCOUNT_ID" \
+curl "https://sandbox-api.seismic-cards.systems/v1/budgets/$BUDGET_ID?accountId=$ACCOUNT_ID" \
   -H "x-access-token: $ACCESS_TOKEN"
 ```
 
@@ -321,7 +321,7 @@ This is the only call you repeat per card. Pass the `accountId`, `binId`, `cardh
 
 ```http
 POST /v1/budget-card
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 x-access-token: <your access token>
 Idempotency-Key: 9c8b7a6e-1f4a-43b3-8e73-2f1ef0a3a9f1
 Content-Type: application/json
@@ -416,7 +416,7 @@ The card is now `ACTIVE` and chargeable. To complete the user experience:
 import axios from "axios";
 import { v4 as uuid } from "uuid";
 
-const BASE = "https://sandbox-api.seismic.systems";
+const BASE = "https://sandbox-api.seismic-cards.systems";
 const CLIENT_ID     = process.env.SEISMIC_CLIENT_ID!;
 const CLIENT_SECRET = process.env.SEISMIC_CLIENT_SECRET!;
 const PARENT_ACCT   = process.env.SEISMIC_PARENT_ACCOUNT_ID!;

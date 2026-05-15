@@ -25,7 +25,7 @@
 │  ┌────────────────────▼───────────────────────────────────────┐  │
 │  │  Your client (web / iOS WebView / Android WebView)         │  │
 │  │                                                            │  │
-│  │   <script src="https://widget.seismic.systems/index.min.js" />  │  │
+│  │   <script src="https://widget.seismic-cards.systems/index.min.js" />  │  │
 │  │                                                            │  │
 │  │   widget.bootstrap({                                       │  │
 │  │     clientAccessToken: jwt,                                │  │
@@ -34,9 +34,9 @@
 │  │                                                            │  │
 │  │   ┌──────────────────────────────────────────────┐         │  │
 │  │   │  3 iframes injected by Widget.js:            │         │  │
-│  │   │   • #card-pan  ←  iframe → widget.seismic.systems │         │  │
-│  │   │   • #card-exp  ←  iframe → widget.seismic.systems │         │  │
-│  │   │   • #card-cvv  ←  iframe → widget.seismic.systems │         │  │
+│  │   │   • #card-pan  ←  iframe → widget.seismic-cards.systems │         │  │
+│  │   │   • #card-exp  ←  iframe → widget.seismic-cards.systems │         │  │
+│  │   │   • #card-cvv  ←  iframe → widget.seismic-cards.systems │         │  │
 │  │   └──────────────────────────────────────────────┘         │  │
 │  └────────────────────────────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────┘
@@ -89,7 +89,7 @@ The returned `accessToken` is a JWT scoped to one card and one user, valid for ~
   <div class="row"><div class="label">Expires</div>     <div id="card-exp" class="pane"></div></div>
   <div class="row"><div class="label">CVV</div>         <div id="card-cvv" class="pane"></div></div>
 
-  <script src="https://widget.seismic.systems/index.min.js"></script>
+  <script src="https://widget.seismic-cards.systems/index.min.js"></script>
   <script>
     fetch("/api/cards/CARD_UUID/access-token", { credentials: "include" })
       .then((r) => r.json())
@@ -197,7 +197,7 @@ async function pciWidgetHandler(req, res) {
   <div class="row"><div class="label">Expires</div>     <div id="card-exp" class="pane"></div></div>
   <div class="row"><div class="label">CVV</div>         <div id="card-cvv" class="pane"></div></div>
 
-  <script src="https://widget.seismic.systems/index.min.js"></script>
+  <script src="https://widget.seismic-cards.systems/index.min.js"></script>
   <script>
     var token = ${JSON.stringify(cardJwt)};
     function boot() {
@@ -268,13 +268,13 @@ widget.bootstrap({
 | `onFailure` fires with `token expired` | Access token older than ~5 min | Mint a fresh token; do not cache. |
 | Iframes are 0px tall on iOS / WebView | Parent `<div>` measured 0×0 at bootstrap time | Wait for layout (`requestAnimationFrame` x2) or set explicit `min-height`. |
 | Widget renders, then flashes blank when the card flips | Re‑bootstrap was called during animation | Call `widget.destroy()` then `widget.bootstrap()` only after the flip animation settles. |
-| `widget` is `undefined` | The script URL isn't allowlisted (CSP) | Allow `widget.seismic.systems` in your `Content-Security-Policy: script-src` and `frame-src`. |
+| `widget` is `undefined` | The script URL isn't allowlisted (CSP) | Allow `widget.seismic-cards.systems` in your `Content-Security-Policy: script-src` and `frame-src`. |
 
 ---
 
 ## 8. PCI scope reminder
 
-Because all card data lives inside iframes from `widget.seismic.systems`, your application:
+Because all card data lives inside iframes from `widget.seismic-cards.systems`, your application:
 
 - Can be assessed under PCI DSS **SAQ A** (the lightest tier — ~22 controls vs. 200+ for full scope).
 - Never logs, stores, transmits, or processes raw PAN / CVV / track data.

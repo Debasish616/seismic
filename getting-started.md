@@ -10,8 +10,8 @@ Seismic provides two fully isolated environments. Test cards in sandbox never mo
 
 | Environment | Base URL | Purpose |
 |---|---|---|
-| **Sandbox** | `https://sandbox-api.seismic.systems` | Build and test against synthetic data. Test BIN, simulated KYC results, simulated authorizations. |
-| **Production** | `https://api.seismic.systems` | Real cards, real authorizations, real money. Requires a production credential set issued after sandbox sign‑off. |
+| **Sandbox** | `https://sandbox-api.seismic-cards.systems` | Build and test against synthetic data. Test BIN, simulated KYC results, simulated authorizations. |
+| **Production** | `https://api.seismic-cards.systems` | Real cards, real authorizations, real money. Requires a production credential set issued after sandbox sign‑off. |
 
 > Throughout the docs, examples use sandbox URLs. Swap `sandbox-api` for `api` for production.
 
@@ -48,11 +48,11 @@ Seismic uses an OAuth 2.0 **two‑step authorization code grant**. The flow take
 
 ```http
 GET /v1/oauth/authorize?clientId=YOUR_CLIENT_ID
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 ```
 
 ```bash
-curl "https://sandbox-api.seismic.systems/v1/oauth/authorize?clientId=YOUR_CLIENT_ID"
+curl "https://sandbox-api.seismic-cards.systems/v1/oauth/authorize?clientId=YOUR_CLIENT_ID"
 ```
 
 **Response (200):**
@@ -74,7 +74,7 @@ The `data.code` field is a single‑use authorization ticket. It expires in 10 m
 
 ```http
 POST /v1/oauth/access-token
-Host: sandbox-api.seismic.systems
+Host: sandbox-api.seismic-cards.systems
 Content-Type: application/json
 
 {
@@ -85,7 +85,7 @@ Content-Type: application/json
 ```
 
 ```bash
-curl -X POST https://sandbox-api.seismic.systems/v1/oauth/access-token \
+curl -X POST https://sandbox-api.seismic-cards.systems/v1/oauth/access-token \
   -H "Content-Type: application/json" \
   -d '{
     "clientId":     "YOUR_CLIENT_ID",
@@ -176,7 +176,7 @@ class SeismicAuth {
 Once you have an `accessToken`, list the BINs your program is allowed to issue from. Every program has at least one. The BIN's `id` is what you'll pass as `binId` in cardholder and card creation requests.
 
 ```bash
-curl "https://sandbox-api.seismic.systems/v1/card/bins?accountId=YOUR_PARENT_ACCOUNT_ID" \
+curl "https://sandbox-api.seismic-cards.systems/v1/card/bins?accountId=YOUR_PARENT_ACCOUNT_ID" \
   -H "x-access-token: 6da5bf8a64b34ea30cfb75a6a5e8a9a28a59b8a3"
 ```
 

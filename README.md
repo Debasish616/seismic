@@ -1,6 +1,6 @@
 # Seismic Cards API — Documentation
 
-Source for the public docs site at **[docs.seismic.systems](https://docs.seismic.systems)**.
+Source for the public docs site at **[docs.seismic-cards.systems](https://docs.seismic-cards.systems)**.
 
 ## What's here
 

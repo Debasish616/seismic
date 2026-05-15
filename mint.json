@@ -4,7 +4,7 @@
   "logo": {
     "light": "/logo/light.svg",
     "dark":  "/logo/dark.svg",
-    "href":  "https://docs.seismic.systems"
+    "href":  "https://docs.seismic-cards.systems"
   },
   "favicon": "/favicon.svg",
   "colors": {
@@ -27,16 +27,16 @@
   "topbarLinks": [
     {
       "name": "Status",
-      "url":  "https://status.seismic.systems"
+      "url":  "https://status.seismic-cards.systems"
     },
     {
       "name": "Support",
-      "url":  "mailto:support@seismic.systems"
+      "url":  "mailto:support@seismic-cards.systems"
     }
   ],
   "topbarCtaButton": {
     "name": "Talk to Sales",
-    "url":  "https://www.seismic.systems"
+    "url":  "https://www.seismic-cards.systems"
   },
   "primaryTab": {
     "name": "Documentation"
@@ -89,7 +89,7 @@
     }
   ],
   "footerSocials": {
-    "website":  "https://www.seismic.systems",
+    "website":  "https://www.seismic-cards.systems",
     "x":        "https://x.com/seismicsys",
     "linkedin": "https://www.linkedin.com/company/seismicsystems"
   },

@@ -3,8 +3,8 @@
 Issue Visa / Mastercard virtual cards to your end users in minutes. Seismic's Cards API gives you a programmatic, PCI‑compliant card issuing platform — sub‑accounts, KYC, cardholders, funding budgets, virtual card creation, spend webhooks, and a drop‑in widget for displaying full card details on your own UI.
 
 > **Version:** v1 (current)  
-> **Base URL (Production):** `https://api.seismic.systems`  
-> **Base URL (Sandbox):**     `https://sandbox-api.seismic.systems`  
+> **Base URL (Production):** `https://api.seismic-cards.systems`  
+> **Base URL (Sandbox):**     `https://sandbox-api.seismic-cards.systems`  
 > **Auth:** OAuth 2.0 (Client Credentials → short‑lived access token)  
 > **Format:** `application/json` for all requests and responses
 
@@ -141,10 +141,10 @@ After contracting with Seismic, you'll receive:
 
 ```bash
 # Step A: exchange clientId for a short-lived authorization code
-curl "https://sandbox-api.seismic.systems/v1/oauth/authorize?clientId=YOUR_CLIENT_ID"
+curl "https://sandbox-api.seismic-cards.systems/v1/oauth/authorize?clientId=YOUR_CLIENT_ID"
 
 # Step B: exchange code + secret for an access token (valid 24 hours)
-curl -X POST https://sandbox-api.seismic.systems/v1/oauth/access-token \
+curl -X POST https://sandbox-api.seismic-cards.systems/v1/oauth/access-token \
   -H "Content-Type: application/json" \
   -d '{
     "clientId": "YOUR_CLIENT_ID",
@@ -173,7 +173,7 @@ Response:
 Pass `x-access-token` on every subsequent request:
 
 ```bash
-curl https://sandbox-api.seismic.systems/v1/card/bins?accountId=YOUR_PARENT_ACCOUNT_ID \
+curl https://sandbox-api.seismic-cards.systems/v1/card/bins?accountId=YOUR_PARENT_ACCOUNT_ID \
   -H "x-access-token: 6da5bf8a64b34ea30cfb75a6a5e8a9a28a59b8a3"
 ```
 
@@ -208,8 +208,8 @@ That's it — you're now authenticated and can issue cards. Continue with **[Get
 ## Support
 
 - **Sandbox dashboard:** _provided by your account manager during onboarding_
-- **Status page:** `https://status.seismic.systems`
-- **Email:** `support@seismic.systems`
+- **Status page:** `https://status.seismic-cards.systems`
+- **Email:** `support@seismic-cards.systems`
 - **Production access:** complete sandbox integration, then request production credentials.
 
 ---

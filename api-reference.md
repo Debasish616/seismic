@@ -2,8 +2,8 @@
 
 Complete reference for every endpoint in the Seismic Cards API v1.
 
-**Base URL (Sandbox):** `https://sandbox-api.seismic.systems`  
-**Base URL (Production):** `https://api.seismic.systems`  
+**Base URL (Sandbox):** `https://sandbox-api.seismic-cards.systems`  
+**Base URL (Production):** `https://api.seismic-cards.systems`  
 **Auth:** `x-access-token: <token>` on every authenticated request  
 **Content type:** `application/json`
 

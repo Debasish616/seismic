@@ -8,7 +8,7 @@ This folder is a fully Mintlify-ready site. Follow the steps below to go from a 
 
 - A GitHub account with permission to push a new repository.
 - An email you can sign up to Mintlify with.
-- (Optional, for custom domain) Access to your DNS for `seismic.systems`.
+- (Optional, for custom domain) Access to your DNS for `seismic-cards.systems`.
 
 ---
 
@@ -52,22 +52,22 @@ The site is live. Every push to `main` auto-redeploys.
 
 ## 3. Wire a custom domain
 
-1. In the Mintlify dashboard → **Settings → Custom Domain** → enter `docs.seismic.systems`.
+1. In the Mintlify dashboard → **Settings → Custom Domain** → enter `docs.seismic-cards.systems`.
 2. Mintlify gives you a `CNAME` target — usually `cname.mintlify.app` or similar.
 3. In your DNS provider (Cloudflare / Route53 / Namecheap / etc.):
 
 ```dns
-docs.seismic.systems   CNAME   cname.mintlify.app    300
+docs.seismic-cards.systems   CNAME   cname.mintlify.app    300
 ```
 
-> If `seismic.systems` is on Cloudflare with proxy enabled (orange cloud), set the record to **DNS only** (grey cloud) so Mintlify can issue the TLS cert.
+> If `seismic-cards.systems` is on Cloudflare with proxy enabled (orange cloud), set the record to **DNS only** (grey cloud) so Mintlify can issue the TLS cert.
 
 4. Wait for DNS to propagate (~1–5 min). Mintlify auto-issues a Let's Encrypt cert and flips the domain green when ready.
 
 You'll now have:
 
 ```
-https://docs.seismic.systems
+https://docs.seismic-cards.systems
 ```
 
 ---
@@ -159,7 +159,7 @@ Mintlify ships built-in basic analytics (page views, search queries). For deeper
 "analytics": {
   "ga4":      { "measurementId": "G-XXXXXXX" },
   "posthog":  { "apiKey": "phc_..." },
-  "plausible":{ "domain": "docs.seismic.systems" }
+  "plausible":{ "domain": "docs.seismic-cards.systems" }
 }
 ```
 
@@ -184,4 +184,4 @@ cards/
 └── errors.md
 ```
 
-That's it — push, connect, and your client has a polished docs portal at `docs.seismic.systems`.
+That's it — push, connect, and your client has a polished docs portal at `docs.seismic-cards.systems`.

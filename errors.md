@@ -118,5 +118,5 @@ After the final retry the event is moved to a dead‑letter queue. Failed delive
 ## Need help?
 
 - **Sandbox dashboard logs:** every API call is logged with the request ID, response, and timing.
-- **Status page:** `https://status.seismic.systems`
-- **Support:** `support@seismic.systems` — include the `request-id` header from any failing response.
+- **Status page:** `https://status.seismic-cards.systems`
+- **Support:** `support@seismic-cards.systems` — include the `request-id` header from any failing response.
