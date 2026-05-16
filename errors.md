@@ -1,122 +1,109 @@
-# Error Codes
+---
+title: "Errors"
+description: "How error responses are shaped and what to do about each one."
+---
 
-All Seismic Cards API errors follow the same envelope:
+# Errors
+
+Every error response is a JSON envelope:
 
 ```json
-{ "code": "40001", "message": "Invalid parameter" }
+{
+  "error":  "Human-readable message",
+  "code":   "OPTIONAL_MACHINE_CODE"
+}
 ```
 
-The HTTP status is `4xx` for client errors and `5xx` for server errors. The `code` field is a stable string — match against it in your code rather than the human‑readable `message`.
+Sometimes a `details` field is present with structured field-level info from validation:
+
+```json
+{
+  "error":   "Validation failed",
+  "details": {
+    "fieldErrors": {
+      "email": ["Invalid email"]
+    }
+  }
+}
+```
+
+> **Best practice:** match against the HTTP status + the `error` substring you care about, or the optional `code` if present. Never break your retry logic on the human-readable message — it can be reworded.
 
 ---
 
-## How to read the code
+## HTTP status reference
 
-Codes are 5‑digit strings:
-
-| Range | Class |
-|---|---|
-| `00000` – `00099` | Success / informational |
-| `01xxxx` – `09xxxx` | Field‑level validation |
-| `40xxx` | Authentication / authorization |
-| `100xxx` – `199xxx` | Resource lifecycle (cardholder, card, KYC) |
-| `9xxxx` | Internal server / dependency errors |
-
-The first two digits typically match the HTTP status (e.g. `40001` → `400`, `40399` → `403`).
-
----
-
-## Common errors
-
-| Code | HTTP | Meaning | Likely cause |
-|---|---|---|---|
-| `000000` | 200 | Success | — |
-| `40001` | 400 | Invalid parameter | A required field is missing or malformed. The `message` will name the field. |
-| `40002` | 400 | Validation failed | A field passed type checks but failed semantic validation (e.g. invalid country code). |
-| `40003` | 400 | Idempotency key reuse | Same `Idempotency-Key` used with a different request body. Use a fresh UUID. |
-| `40004` | 400 | Reference ID already used | Your `referenceId` for a cardholder/card already exists. Generate a fresh one. |
-| `40101` | 401 | Unauthorized | Missing or expired `x-access-token`. Re‑run the OAuth flow. |
-| `40399` | 403 | Permission denied | Token is for a different program / environment. |
-| `40404` | 404 | Resource not found | The `accountId`, `cardholderId`, `budgetId`, or `cardId` you referenced doesn't exist or doesn't belong to your program. |
-| `40499` | 404 | Endpoint not found | Path typo or wrong API version. |
-| `40901` | 409 | Conflict / duplicate | Email already exists for `parentAccountId`, etc. |
-| `40903` | 409 | Cardholder email mismatch | The cardholder you're trying to attach belongs to a different sub‑account or has a different email. |
-| `42901` | 429 | Rate limit exceeded | Back off and retry with exponential delay. |
-| `50000` | 500 | Internal server error | Retry with the same `Idempotency-Key`; if it persists, contact support. |
-| `50301` | 503 | Service temporarily unavailable | Upstream issuer / network outage. Retry. |
+| HTTP | When | Retry? |
+|------|------|--------|
+| `400` | Validation error — missing / invalid body, bad PIN, missing query param. | ❌ Fix the request. |
+| `401` | Missing/invalid bearer token, expired JWT, bad `clientId`/`apiKey`. | ❌ Re-authenticate. |
+| `403` | IP not allowlisted, or credentials don't match the white-label hostname you called. | ❌ Use the right credentials/host. |
+| `404` | Organization / cardholder / card not found in your program. | ❌ Check the ID. |
+| `409` | Conflict — slug collision, hostname already registered to another partner, etc. | ❌ Use a different value. |
+| `422` | Upstream KYC / BIN / regulatory rejection. | ⚠️ Sometimes (re-submit corrected data). |
+| `429` | Rate-limited. | ✅ With exponential backoff. |
+| `500` | Internal server error. | ✅ Retry once after a few seconds. |
+| `502` | Upstream issuer error (Visa network, Interlace, etc.). | ✅ Retry with backoff up to 3 attempts. |
+| `503` | Issuer not configured for your program. | ❌ Contact support — Seismic-side problem. |
 
 ---
 
-## KYC / cardholder errors
+## Common errors and how to recover
 
-| Code | Meaning | Action |
-|---|---|---|
-| `010001` | Email already in use | The cardholder profile already exists with a different referenceId. Look it up via `GET /v1/cardholders` and reuse its `id`. |
-| `010002` | Email is null | Cardholder PATCH must include `email` for BB / BZ BINs. |
-| `010003` | Phone validation failed | Phone format failed `libphonenumber` rules. Check `phoneCountryCode` (no `+`) and the number itself. |
-| `010004` | Combined name too long | `firstName + " " + lastName` must be ≤ 23 characters. Abbreviate. |
-| `010005` | Invalid characters in name | A–Z / a–z only — strip diacritics and punctuation. |
-| `010101` | KYC source not supported | `sourceType` is unknown. Use `"sumsub"` (or another source enabled for your program). |
-| `010102` | KYC token invalid | The `sumsubShareToken` is expired or for a different applicant. |
-| `010103` | KYC already approved | The user is already KYC'd. No action needed. |
+### Auth
 
----
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `401 Invalid client id or key` | Wrong `clientId`, wrong `apiKey`, or apiKey was revoked. | Verify the values; if you've lost the key, ask for a new one. |
+| `401 Missing Authorization bearer token` | Forgot to send `Authorization: Bearer …`. | Add the header. |
+| `401 Invalid or expired partner session` | JWT older than 1 hour. | Call `POST /api/v1/auth/session` again. |
+| `403 IP not in allowlist` | Your program has IP allowlisting on. Source IP doesn't match. | Add the IP via support, or call from an allowlisted host. |
+| `403 This credential is not valid for the API hostname you are using` | You called `api.seismic-cards.systems` (white-label) with another program's credentials. | Use the credentials issued for the program that owns this hostname, or call the default Seismic URL. |
 
-## Card lifecycle errors
+### Organizations
 
-| Code | Meaning | Action |
-|---|---|---|
-| `020001` | BIN not available for account | Pass the right `binId` from `GET /v1/card/bins`. |
-| `020002` | Cardholder not approved | Wait for `CARDHOLDER.UPDATED` → `APPROVED`. |
-| `020003` | Account not initialized | Call `POST /v1/accounts/{accountId}/init` after KYC approval. |
-| `020004` | Budget balance insufficient for issuance | Some BINs require a minimum opening balance. Fund the budget first. |
-| `020005` | Card limit reached | Your program's per‑user maximum has been hit. |
-| `020010` | Card already deleted | Operation skipped. |
-| `020011` | Card already frozen / unfrozen | Operation skipped (idempotent). |
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `404 Organization not found` | `orgId` doesn't exist or doesn't belong to your program. | Verify with `GET /api/v1/organizations`. |
+| `409` on create org | Slug already in use within your program. | Pass an explicit `slug`, or omit and we'll suffix it. |
 
----
+### Cardholders
 
-## Funding errors
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `400 Cardholder not provisioned` | Tried to issue/PIN/freeze a card before calling `/cardholders/provision`. | Provision first; the call is idempotent so re-running is safe. |
+| `400 Validation failed` on provision | A required KYC field is missing or wrong shape. | Inspect `details.fieldErrors`. Common: `country` must be 2 letters, `phoneCountryCode` must include `+`. |
+| `422` on provision | KYC rejected the cardholder. | Re-submit with corrected name/address/phone; we resume from the failed step. |
 
-| Code | Meaning | Action |
-|---|---|---|
-| `030001` | Insufficient balance | The source wallet (USD Wallet or budget) doesn't have enough for the transfer. Top up. |
-| `030002` | Currency mismatch | Source and destination must be the same currency. |
-| `030003` | Locked funds | The amount you want to withdraw is locked by pending card authorizations. Wait for them to clear. |
+### Cards
 
----
-
-## Webhook errors (your endpoint → us)
-
-If your endpoint returns non‑`2xx`, Seismic logs the failure and retries:
-
-| Attempt | Delay |
-|---|---|
-| 1 | immediate |
-| 2 | +30 s |
-| 3 | +1 min |
-| 4 | +5 min |
-| 5 | +15 min |
-| 6 | +1 h |
-| 7 | +4 h |
-| 8 | +24 h (final) |
-
-After the final retry the event is moved to a dead‑letter queue. Failed deliveries are replayable from the dashboard for up to 30 days.
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| `400 Query externalUserId required` | List/get card endpoints need `?externalUserId=…`. | Add the query param. |
+| `400 PIN must be 6 digits` | PIN wrong length. | Use exactly 6 digits. |
+| `400 PIN cannot contain three identical digits in a row` | PIN like `111000`. | Pick a non-trivial PIN. |
+| `400 PIN cannot contain three sequential digits` | PIN like `123456`, `987654`, `890…`, `098…`. | Pick a non-sequential PIN. |
+| `502 No card BIN available for this account` | Issuer didn't return any usable BIN. | Contact support. |
+| `503 Interlace is not configured` | Backend missing issuer credentials. | Contact support. |
 
 ---
 
-## Best practices
+## What to log
 
-1. **Pattern‑match on `code`, not `message`.** Messages may be reworded; codes are stable.
-2. **Retry on `5xx` and `429` only.** Other errors (`4xx`) won't succeed on retry without changing the request.
-3. **Always send a fresh `Idempotency-Key` when the request body changes.** Re‑use only when retrying the *same* request.
-4. **Log the full error envelope** (`code`, `message`, response headers, request ID) for support tickets.
-5. **Don't leak internal codes to end users.** Map error codes to human‑friendly messages in your UI.
+When you open a support ticket, include:
+
+- The **HTTP status** and full response body.
+- The Railway/Cloudflare/etc. **request ID** from response headers (e.g. `x-request-id`).
+- A timestamp (ISO-8601, UTC).
+- The exact endpoint and method.
+- The shape of your request (no secrets, no PII).
+
+This lets us trace through our logs in seconds.
 
 ---
 
-## Need help?
+## Reach us
 
-- **Sandbox dashboard logs:** every API call is logged with the request ID, response, and timing.
-- **Status page:** `https://status.seismic-cards.systems`
-- **Support:** `support@seismic-cards.systems` — include the `request-id` header from any failing response.
+- **Sandbox dashboard:** every API call is logged with status + timing.
+- **Status page:** [status.seismic-cards.systems](https://status.seismic-cards.systems) (rolling).
+- **Support:** [support@seismic-cards.systems](mailto:support@seismic-cards.systems).

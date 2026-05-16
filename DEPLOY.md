@@ -185,3 +185,67 @@ cards/
 ```
 
 That's it — push, connect, and your client has a polished docs portal at `docs.seismic-cards.systems`.
+
+---
+
+## 8. Wiring the API URLs (Seismic Cards specifics)
+
+These docs reference two API hostnames:
+
+| URL | Status |
+|-----|--------|
+| `https://api.seismic-cards.systems` | **Registered** in Rave's white-label hostname table for Seismic. Awaiting Seismic DNS + TLS. |
+| `https://sandbox-api.seismic-cards.systems` | **Registered** in Rave's white-label hostname table for Seismic. Awaiting Seismic DNS + TLS. |
+| `https://rave-card-api-production.up.railway.app` | **Live today.** Same API; Seismic credentials work against it. Used as the temporary sandbox URL until DNS lands. |
+
+### Step 1 — Seismic adds DNS
+
+In Seismic's DNS provider (Cloudflare, Route53, GoDaddy, etc.):
+
+```dns
+api.seismic-cards.systems          CNAME   rave-card-api-production.up.railway.app   300
+sandbox-api.seismic-cards.systems  CNAME   rave-card-api-production.up.railway.app   300
+```
+
+> If Seismic uses Cloudflare with proxy enabled (orange cloud), set the records to **DNS only** (grey cloud) so Railway can issue TLS.
+
+### Step 2 — Add custom domains in Railway (Rave operator)
+
+In Railway → `rave-card-issuance` project → `rave-card-api` service → **Settings → Networking → Custom Domain**:
+
+```
+api.seismic-cards.systems
+sandbox-api.seismic-cards.systems
+```
+
+Railway auto-issues Let's Encrypt certs once it sees the CNAME. Usually under 60 seconds.
+
+### Step 3 — Verify the hostname → tenant mapping
+
+```bash
+curl https://api.seismic-cards.systems/.well-known/rave-card-issuance.json
+# expected:
+# {"ok": true, "hostname": "api.seismic-cards.systems",
+#  "partnerName": "Seismic", "partnerSlug": "seismic", "publicClientId": "cid_..."}
+```
+
+If this returns the right `partnerSlug`, every call to `https://api.seismic-cards.systems/api/v1/...` will:
+
+1. Resolve the `Host` header → Seismic partner row.
+2. Reject any session JWT or `clientId/apiKey` that doesn't belong to Seismic (`403`).
+
+### Step 4 — Update these docs (after DNS lands)
+
+The example URLs in this site already reference `(sandbox-)api.seismic-cards.systems`. Once steps 1–3 are done, the docs become accurate without further edits.
+
+If you want to leave breadcrumbs while DNS is pending, replace the example URLs with `https://rave-card-api-production.up.railway.app` and add a banner in `mint.json`:
+
+```json
+"topAnnouncementBar": {
+  "content": "Sandbox is currently live at rave-card-api-production.up.railway.app while api.seismic-cards.systems DNS propagates."
+}
+```
+
+---
+
+## 9. Troubleshooting

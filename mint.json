@@ -54,14 +54,9 @@
       "url":  "issuing-a-card"
     },
     {
-      "name": "Webhooks",
-      "icon": "bolt",
+      "name": "Roadmap",
+      "icon": "map",
       "url":  "webhooks"
-    },
-    {
-      "name": "PCI Widget",
-      "icon": "shield-check",
-      "url":  "pci-widget"
     }
   ],
   "navigation": [
@@ -75,9 +70,7 @@
     {
       "group": "Guides",
       "pages": [
-        "issuing-a-card",
-        "pci-widget",
-        "webhooks"
+        "issuing-a-card"
       ]
     },
     {
@@ -85,6 +78,13 @@
       "pages": [
         "api-reference",
         "errors"
+      ]
+    },
+    {
+      "group": "Roadmap",
+      "pages": [
+        "webhooks",
+        "pci-widget"
       ]
     }
   ],
