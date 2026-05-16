@@ -166,5 +166,5 @@ console.log(me);
 ## Next steps
 
 - **[Issue your first card](/issuing-a-card)** — full end-to-end walkthrough.
-- **[API Reference](/api-reference)** — every endpoint, every field.
+- Open **Seismic Playground** in the docs header (`/playground`) for the Mintlify OpenAPI explorer (**Try it** + bearer auth against sandbox / staging).
 - **[Errors](/errors)** — error codes and how to recover.

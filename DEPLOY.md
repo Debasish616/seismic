@@ -145,7 +145,15 @@ Then open `http://localhost:3000`. Saves auto-reload.
 
 3. Mintlify auto-generates one page per endpoint, with an interactive request form.
 
-> Tip: a Postman collection isn't enough — Mintlify wants OpenAPI 3.x. We can generate one from `api-reference.md` in a follow-up if you want.
+#### After API changes — refresh playground
+
+Partners see **Seismic Playground** (Mintlify API Playground at `/playground`). Regenerate OpenAPI locally before commit:
+
+```bash
+cd cards
+npm run openapi:refresh
+git add openapi.json && git commit -m "chore(docs): refresh OpenAPI spec"
+```
 
 ### Can I gate the docs behind a login?
 
@@ -170,6 +178,8 @@ Mintlify ships built-in basic analytics (page views, search queries). For deeper
 ```
 cards/
 ├── mint.json                  ← Mintlify config (theme, navigation, branding)
+├── openapi.json               ← OpenAPI for Seismic Playground (refresh: npm run openapi:refresh)
+├── scripts/build-openapi.mjs  ← Fetches live /docs/json, strips Raven internal routes for Seismic
 ├── favicon.svg
 ├── logo/
 │   ├── light.svg
@@ -178,10 +188,10 @@ cards/
 ├── introduction.md            ← Landing page (rendered at "/")
 ├── getting-started.md
 ├── issuing-a-card.md
-├── api-reference.md
+├── seismic-playground-guide.md  ← Bearer auth + spec refresh notes for playground users
+├── errors.md
 ├── webhooks.md
-├── pci-widget.md
-└── errors.md
+└── pci-widget.md
 ```
 
 That's it — push, connect, and your client has a polished docs portal at `docs.seismic-cards.systems`.

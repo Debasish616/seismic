@@ -1,0 +1,9 @@
+{
+  "name": "seismic-cards-docs",
+  "private": true,
+  "description": "Mintlify docs for Seismic Cards API — run mintlify dev here",
+  "scripts": {
+    "openapi:refresh": "node scripts/build-openapi.mjs",
+    "validate": "mint validate"
+  }
+}

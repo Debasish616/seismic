@@ -1,0 +1,556 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Seismic Cards API — playground",
+    "description": "Seismic Cards partner REST API for Seismic Playground (/playground): exchange credentials for a session JWT, manage organizations (tenants), cardholders, and virtual cards.",
+    "version": "0.1.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "partnerBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Paste accessToken from POST /api/v1/auth/session (Bearer). Valid ~1 hour. Do not expose client secrets in the browser playground on public docs — use sandbox keys only."
+      }
+    },
+    "schemas": {}
+  },
+  "paths": {
+    "/api/v1/auth/session": {
+      "post": {
+        "summary": "Exchange client id + API key for session JWT",
+        "tags": [
+          "Authentication"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "clientId",
+                  "apiKey"
+                ],
+                "properties": {
+                  "clientId": {
+                    "type": "string",
+                    "description": "Partner public client id (cid_...)"
+                  },
+                  "apiKey": {
+                    "type": "string",
+                    "description": "Full API key (cik_sbx_...)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "tokenType": {
+                      "type": "string"
+                    },
+                    "expiresIn": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "summary": "Current partner context",
+        "tags": [
+          "Authentication"
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations": {
+      "get": {
+        "summary": "List organizations (L2 end companies)",
+        "tags": [
+          "Organizations"
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create organization",
+        "tags": [
+          "Organizations"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "programType"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "programType": {
+                    "type": "string",
+                    "enum": [
+                      "CORPORATE",
+                      "CONSUMER_BRAND"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}": {
+      "get": {
+        "summary": "Get organization",
+        "tags": [
+          "Organizations"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cardholders": {
+      "get": {
+        "summary": "List cardholder profiles (L3 external ids)",
+        "tags": [
+          "Organizations",
+          "Cardholders"
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cardholders/provision": {
+      "post": {
+        "summary": "Provision Interlace sub-account + budget + cardholder (v3 + v2 init)",
+        "tags": [
+          "Organizations",
+          "Cardholders"
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cardholders/{externalUserId}/cards": {
+      "post": {
+        "summary": "Issue virtual budget card (v3 budget-card)",
+        "tags": [
+          "Cards"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "externalUserId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cards": {
+      "get": {
+        "summary": "List cards for organization (requires provisioned cardholder query param)",
+        "tags": [
+          "Cards"
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cards/{cardId}": {
+      "get": {
+        "summary": "Card details (scrubbed issuer fields)",
+        "tags": [
+          "Cards"
+        ],
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "cardId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cards/{cardId}/pin": {
+      "put": {
+        "summary": "Update card PIN (Interlace PUT /v3/cards/{id}/pin)",
+        "tags": [
+          "Cards"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "pin",
+                  "externalUserId"
+                ],
+                "properties": {
+                  "pin": {
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 6
+                  },
+                  "externalUserId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "cardId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cards/{cardId}/freeze": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "externalUserId"
+                ],
+                "properties": {
+                  "externalUserId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "cardId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/api/v1/organizations/{orgId}/cards/{cardId}/unfreeze": {
+      "post": {
+        "tags": [
+          "Cards"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "externalUserId"
+                ],
+                "properties": {
+                  "externalUserId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "partnerBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "orgId",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "name": "cardId",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://sandbox-api.seismic-cards.systems",
+      "description": "Sandbox"
+    },
+    {
+      "url": "https://api.seismic-cards.systems",
+      "description": "Production"
+    },
+    {
+      "url": "https://rave-card-api-production.up.railway.app",
+      "description": "Staging / beta (temporary)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Session JWT from POST /api/v1/auth/session and caller context."
+    },
+    {
+      "name": "Cardholders",
+      "description": "Provisioning and listing cardholders."
+    },
+    {
+      "name": "Cards",
+      "description": "Issue and manage virtual cards (PIN, freeze)."
+    },
+    {
+      "name": "Organizations",
+      "description": "Organizations (tenants) under your program."
+    }
+  ]
+}

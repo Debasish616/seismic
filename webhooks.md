@@ -13,7 +13,7 @@ description: "Real-time card events delivered to your endpoint. Roadmap."
 
 ## Why
 
-Polling `GET /cards/{id}` to detect status changes doesn't scale. Webhooks let us push card events the moment they happen — typically <500 ms from authorization to your endpoint.
+Polling `GET /cards/{id}` to detect status changes doesn't scale. Webhooks let us push card events the moment they happen — typically in under **500&nbsp;ms** from authorization to your endpoint.
 
 ## Planned event shape
 

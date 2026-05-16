@@ -7,11 +7,12 @@ Source for the public docs site at **[docs.seismic-cards.systems](https://docs.s
 | File | Purpose |
 |---|---|
 | [`introduction.md`](./introduction.md) | Landing page — overview, architecture, full flow, quick start. |
-| [`getting-started.md`](./getting-started.md) | Environments, OAuth flow, headers, first authenticated call. |
-| [`issuing-a-card.md`](./issuing-a-card.md) | End-to-end card creation walkthrough (sub-account → KYC → cardholder → budget → card). |
-| [`api-reference.md`](./api-reference.md) | Every endpoint with request/response examples. |
-| [`webhooks.md`](./webhooks.md) | Real-time events + HMAC-SHA256 signature verification. |
-| [`pci-widget.md`](./pci-widget.md) | Displaying PAN/CVV/expiry securely via Seismic Widget.js. |
+| [`getting-started.md`](./getting-started.md) | Environments, session auth (`clientId` + `apiKey` → JWT), first call. |
+| [`issuing-a-card.md`](./issuing-a-card.md) | End-to-end org → provision → issue card → PIN/freeze. |
+| [`openapi.json`](/openapi.json) | OpenAPI 3.1 spec for **Seismic Playground** (Mintlify; `/playground`). Refresh with `npm run openapi:refresh`. |
+| [`seismic-playground-guide.md`](./seismic-playground-guide.md) | Notes on playground auth + keeping the spec in sync. |
+| [`webhooks.md`](./webhooks.md) | Roadmap webhooks contract. |
+| [`pci-widget.md`](./pci-widget.md) | Roadmap: PCI iframe widget for displaying PAN/CVV. |
 | [`errors.md`](./errors.md) | Full error code reference. |
 | [`mint.json`](./mint.json) | Mintlify deploy configuration. |
 | [`DEPLOY.md`](./DEPLOY.md) | Step-by-step deploy guide for Mintlify (custom domain, branding, OpenAPI). |
