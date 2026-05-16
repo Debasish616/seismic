@@ -48,6 +48,15 @@ https://seismic-systems.mintlify.app
 
 The site is live. Every push to `main` auto-redeploys.
 
+### Seismic Playground tab missing on the live URL
+
+Mintlify reads **`primaryTab`** + **`tabs`** from `mint.json` (see [`mintlify.com/schema.json`](https://mintlify.com/schema.json)). The interactive playground is the tab whose entry includes **`openapi`**. Checklist:
+
+1. **This repo is what Mintlify deploys** — If `docs.seismic-cards.systems` is tied to another GitHub repo or branch, your local `cards/` changes never reach production. In the Mintlify dashboard, confirm repository, **branch**, and (for monorepos) **Path to `mint.json`** (e.g. `cards/mint.json`).
+2. **`openapi` path** — `npx mint@latest validate` expects the tab’s `openapi` value to start with **`/`** or **`https://`**. This project uses **`/openapi.json`**; the file must exist in the deployed docs root (same folder as `mint.json`).
+3. **Redeploy** — Trigger a deployment after pushing; hard-refresh the site (or open an incognito window) in case CDN cache hides the new tab.
+4. **Local sanity check** — From `cards/`, run `npx mintlify dev` or `npx mint@latest dev` and confirm a second top-level tab **Seismic Playground** appears. If it appears locally but not on the hosted domain, the issue is almost always wrong **connected repo / path / branch**, not the OpenAPI file itself.
+
 ---
 
 ## 3. Wire a custom domain
@@ -147,7 +156,7 @@ Then open `http://localhost:3000`. Saves auto-reload.
 
 #### After API changes — refresh playground
 
-Partners see **Seismic Playground** (Mintlify API Playground at `/playground`). Regenerate OpenAPI locally before commit:
+Partners see **Seismic Playground** (Mintlify API Playground under **`/seismic-playground`**, driven by **`tabs[].openapi`: `openapi.json`** in `mint.json`). Regenerate OpenAPI locally before commit:
 
 ```bash
 cd cards

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Seismic Cards API — playground",
-    "description": "Seismic Cards partner REST API for Seismic Playground (/playground): exchange credentials for a session JWT, manage organizations (tenants), cardholders, and virtual cards.",
+    "description": "Seismic Cards partner REST API for Seismic Playground (/seismic-playground): exchange credentials for a session JWT, manage organizations (tenants), cardholders, and virtual cards.",
     "version": "0.1.0"
   },
   "components": {

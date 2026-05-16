@@ -56,7 +56,7 @@ async function main() {
   raw.info = {
     title: "Seismic Cards API — playground",
     description:
-      "Seismic Cards partner REST API for Seismic Playground (/playground): exchange credentials for a session JWT, manage organizations (tenants), cardholders, and virtual cards.",
+      "Seismic Cards partner REST API for Seismic Playground (/seismic-playground): exchange credentials for a session JWT, manage organizations (tenants), cardholders, and virtual cards.",
     version: raw.info?.version ?? "1.0.0",
   };
 

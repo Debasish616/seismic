@@ -24,10 +24,15 @@
     "default": "dark",
     "isHidden": false
   },
+  "api": {
+    "playground": {
+      "mode": "show"
+    }
+  },
   "topbarLinks": [
     {
       "name": "Playground",
-      "url": "/playground"
+      "url": "/seismic-playground"
     },
     {
       "name": "Status",
@@ -48,7 +53,7 @@
   "tabs": [
     {
       "name": "Seismic Playground",
-      "url": "playground",
+      "url": "seismic-playground",
       "openapi": "/openapi.json"
     }
   ],

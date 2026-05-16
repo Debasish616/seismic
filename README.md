@@ -9,7 +9,7 @@ Source for the public docs site at **[docs.seismic-cards.systems](https://docs.s
 | [`introduction.md`](./introduction.md) | Landing page — overview, architecture, full flow, quick start. |
 | [`getting-started.md`](./getting-started.md) | Environments, session auth (`clientId` + `apiKey` → JWT), first call. |
 | [`issuing-a-card.md`](./issuing-a-card.md) | End-to-end org → provision → issue card → PIN/freeze. |
-| [`openapi.json`](/openapi.json) | OpenAPI 3.1 spec for **Seismic Playground** (Mintlify; `/playground`). Refresh with `npm run openapi:refresh`. |
+| [`openapi.json`](/openapi.json) | OpenAPI 3.1 spec for **Seismic Playground** (Mintlify; tab URL `/seismic-playground`). Refresh with `npm run openapi:refresh`. |
 | [`seismic-playground-guide.md`](./seismic-playground-guide.md) | Notes on playground auth + keeping the spec in sync. |
 | [`webhooks.md`](./webhooks.md) | Roadmap webhooks contract. |
 | [`pci-widget.md`](./pci-widget.md) | Roadmap: PCI iframe widget for displaying PAN/CVV. |

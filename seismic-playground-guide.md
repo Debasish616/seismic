@@ -5,7 +5,7 @@ description: "How to use the Seismic-hosted API explorer — Try it, auth, serve
 
 # Seismic Playground
 
-Open the **Seismic Playground** tab in the top bar (Mintlify-generated pages live under **`/playground`** for this site). That tab is Mintlify’s **API Playground** backed by **`/openapi.json`** — Seismic’s official interactive reference alongside these docs.
+Open the **Seismic Playground** tab in the header (generated pages live under **`/seismic-playground`**; `mint.json` → `tabs[].url`). That surface is Mintlify’s **API Playground** backed by **`openapi.json`** — Seismic’s interactive reference alongside these docs.
 
 What you get there:
 

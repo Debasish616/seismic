@@ -232,4 +232,4 @@ Now, repeat steps 3–4 for every user you want to issue cards to. Each org can 
 
 ---
 
-Next: open **Seismic Playground** (`/playground`) for the full endpoint catalog plus **Try it** — or call **`POST /organizations`** directly from your code.
+Next: open **Seismic Playground** (`/seismic-playground`) for the full endpoint catalog plus **Try it** — or call **`POST /organizations`** directly from your code.
